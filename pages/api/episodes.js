@@ -2,9 +2,9 @@
 // Satu function buat semua operasi baca episode, biar hemat kuota
 // 12-function limit di Vercel Hobby (pola sama kayak api/content.js di BapakAI).
 
-const sb = require('../../lib/supabase');
+import * as sb from '../../lib/supabase.js';
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   try {
     const action = req.query.action || (req.method === 'POST' ? req.body?.action : null);
 

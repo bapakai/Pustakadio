@@ -2,9 +2,9 @@
 // Semua operasi per-device (Koleksiku: Tersimpan/Riwayat), device_id dari client (localStorage),
 // no login — sama pola dengan device_id BapakAI.
 
-const sb = require('../../lib/supabase');
+import * as sb from '../../lib/supabase.js';
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   try {
     const body = req.method === 'POST' ? req.body : req.query;
     const { action, device_id } = body;
