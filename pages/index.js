@@ -1,5 +1,15 @@
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { getDeviceId } from '../lib/device';
+import BottomTabBar from '../components/BottomTabBar';
+import EpisodeRow from '../components/EpisodeRow';
+
+const TOPIC_CHIPS = [
+  { name: 'Indonesia', slug: 'indonesia' },
+  { name: 'Dunia', slug: 'dunia' },
+  { name: 'Sains', slug: 'sains' },
+  { name: 'Teknologi', slug: 'teknologi' },
+];
 
 export default function Home() {
   const [daily, setDaily] = useState([]);
@@ -8,7 +18,6 @@ export default function Home() {
 
   useEffect(() => {
     const deviceId = getDeviceId();
-
     async function load() {
       try {
         const [dailyRes, historyRes] = await Promise.all([
@@ -26,44 +35,68 @@ export default function Home() {
     load();
   }, []);
 
-  if (loading) return <div style={{ padding: 24 }}>Memuat...</div>;
+  const hero = daily[0];
+  const rest = daily.slice(1);
 
   return (
-    <main style={{ padding: '16px', maxWidth: 480, margin: '0 auto' }}>
-      <h1 style={{ fontSize: 13, fontWeight: 800 }}>Mau tahu apa hari ini?</h1>
+    <div className="app-shell">
+      <div className="page-logo">
+        <img src="/logomark.png" alt="Pustakadio" />
+      </div>
 
-      {history[0] && (
-        <section style={{ marginTop: 16 }}>
-          <h2 style={{ fontSize: 12, fontWeight: 700 }}>Lanjutkan Mendengarkan</h2>
-          <EpisodeRow episode={history[0].episodes} />
-        </section>
+      <div style={{ padding: '6px 16px 0', fontSize: 14, fontWeight: 800 }}>
+        Mau tahu apa hari ini?
+      </div>
+
+      {loading ? (
+        <p className="empty-state">Memuat...</p>
+      ) : (
+        <>
+          {hero && (
+            <Link href={`/play/${hero.id}`} className="card-hero">
+              <div className="dur">{Math.round((hero.duration_sec || 0) / 60)} MENIT</div>
+              <h3>{hero.title}</h3>
+              <div className="desc">{hero.description}</div>
+              <div className="play-fab">
+                <svg viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z" /></svg>
+              </div>
+            </Link>
+          )}
+
+          {history[0]?.episodes && (
+            <>
+              <div className="section-label">Lanjutkan Mendengarkan</div>
+              <EpisodeRow episode={history[0].episodes} />
+            </>
+          )}
+
+          <div className="section-label">
+            Pengetahuan hari ini
+            <span className="more">Lihat semua</span>
+          </div>
+          {rest.length > 0 ? (
+            rest.map((ep) => <EpisodeRow key={ep.id} episode={ep} />)
+          ) : (
+            !hero && <p className="empty-state">Belum ada episode. Content pipeline belum jalan.</p>
+          )}
+
+          <div className="section-label">Atau jelajahi topik</div>
+          <div className="chip-grid">
+            {TOPIC_CHIPS.map((t) => (
+              <Link key={t.slug} href={`/cari?topic=${t.slug}`} className="chip">
+                <div className="ic">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2">
+                    <circle cx="12" cy="12" r="9" />
+                  </svg>
+                </div>
+                <span>{t.name}</span>
+              </Link>
+            ))}
+          </div>
+        </>
       )}
 
-      <section style={{ marginTop: 16 }}>
-        <h2 style={{ fontSize: 12, fontWeight: 700 }}>Pengetahuan hari ini</h2>
-        {daily.map((ep) => (
-          <EpisodeRow key={ep.id} episode={ep} />
-        ))}
-        {daily.length === 0 && (
-          <p style={{ color: 'var(--muted)', fontSize: 13 }}>
-            Belum ada episode published. Jalankan content pipeline dulu.
-          </p>
-        )}
-      </section>
-    </main>
-  );
-}
-
-function EpisodeRow({ episode }) {
-  if (!episode) return null;
-  const minutes = Math.round((episode.duration_sec || 0) / 60);
-  return (
-    <a href={`/play/${episode.id}`} style={{ display: 'flex', gap: 10, padding: '8px 0' }}>
-      <div style={{ width: 44, height: 44, borderRadius: 10, background: 'var(--light-blue)', flexShrink: 0 }} />
-      <div>
-        <div style={{ fontSize: 13, fontWeight: 700 }}>{episode.title}</div>
-        <div style={{ fontSize: 11, color: 'var(--muted)' }}>{minutes} menit</div>
-      </div>
-    </a>
+      <BottomTabBar active="/" />
+    </div>
   );
 }
