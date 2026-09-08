@@ -1,0 +1,23 @@
+:root {
+  --navy: #0B2A4A;
+  --blue: #2563EB;
+  --light-blue: #EAF3FF;
+  --off-white: #F8F9FC;
+  --muted: #6B7C93;
+  --border: #E1E8F2;
+  --r-card: 16px;
+  --r-button: 999px;
+  --r-input: 14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Manrope', Arial, sans-serif;
+  background: var(--off-white);
+  color: var(--navy);
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; border: none; cursor: pointer; }
