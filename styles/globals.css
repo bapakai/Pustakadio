@@ -122,6 +122,43 @@ img { max-width: 100%; display: block; }
 .tabbar a.active .dot { background: var(--light-blue); }
 .tabbar .dot svg { width: 14px; height: 14px; }
 
+.profil-id {
+  margin: 8px 16px 0; border-radius: var(--r-card); padding: 20px 16px;
+  background: linear-gradient(155deg, var(--navy) 0%, #123258 55%, var(--blue) 135%);
+  display: flex; align-items: center; gap: 14px;
+}
+.profil-id .avatar {
+  width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center;
+}
+.profil-id .avatar svg { width: 24px; height: 24px; }
+.profil-id h4 { color: #fff; font-size: 15px; margin: 0 0 3px; font-weight: 800; }
+.profil-id small { color: #C9DBFF; font-size: 11px; letter-spacing: 0.3px; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 16px 4px; }
+.stat-tile {
+  background: var(--off-white); border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 8px; text-align: center;
+}
+.stat-tile .v { font-size: 20px; font-weight: 800; color: var(--navy); line-height: 1.2; }
+.stat-tile .l { font-size: 10px; color: var(--muted); margin-top: 3px; font-weight: 600; }
+
+.about-card {
+  margin: 18px 16px 0; border-radius: var(--r-card); padding: 16px;
+  background: var(--off-white); border: 1px solid var(--border);
+}
+.about-card .tag { font-size: 10px; font-weight: 700; color: var(--blue); letter-spacing: 0.4px; }
+.about-card h4 { margin: 6px 0 6px; font-size: 15px; color: var(--navy); font-weight: 800; }
+.about-card p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.6; }
+.about-card .ver { margin-top: 10px; font-size: 10px; color: var(--muted); }
+
+.reset-btn {
+  display: block; width: calc(100% - 32px); margin: 18px 16px 8px;
+  padding: 13px; border-radius: var(--r-button); text-align: center;
+  font-size: 12px; font-weight: 700; color: #C0392B; background: #FDECEA; border: 1px solid #F5C6C0;
+}
+.reset-hint { text-align: center; font-size: 10px; color: var(--muted); margin: 0 24px 24px; line-height: 1.5; }
+
 .player-shell { min-height: 100vh; background: linear-gradient(165deg, #061a2e 0%, var(--navy) 55%, #163e6e 100%); color: #fff; padding-bottom: 24px; }
 .player-top { display: flex; justify-content: space-between; align-items: center; padding: 16px; }
 .player-top a svg { width: 20px; height: 20px; }
