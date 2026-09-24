@@ -66,6 +66,39 @@ export default async function handler(req, res) {
         return res.status(200).json({ history: rows });
       }
 
+      case 'stats': {
+        // buat halaman Profil — ringkasan aktivitas dengar per device, no login
+        const [historyRows, savedRows] = await Promise.all([
+          sb.select(
+            'listening_history',
+            'completed,progress_sec,episodes(topic_id,topics(name))',
+            `device_id=eq.${device_id}`
+          ),
+          sb.select('saved_episodes', 'episode_id', `device_id=eq.${device_id}`),
+        ]);
+
+        const totalCompleted = historyRows.filter((h) => h.completed).length;
+        const totalMinutes = Math.round(
+          historyRows.reduce((sum, h) => sum + (h.progress_sec || 0), 0) / 60
+        );
+        const totalSaved = savedRows.length;
+
+        const topicCounts = {};
+        historyRows.forEach((h) => {
+          const name = h.episodes?.topics?.name;
+          if (name) topicCounts[name] = (topicCounts[name] || 0) + 1;
+        });
+        const topTopic =
+          Object.entries(topicCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || null;
+
+        return res.status(200).json({
+          total_completed: totalCompleted,
+          total_minutes: totalMinutes,
+          total_saved: totalSaved,
+          top_topic: topTopic,
+        });
+      }
+
       default:
         return res.status(400).json({ error: `action '${action}' tidak dikenali` });
     }
